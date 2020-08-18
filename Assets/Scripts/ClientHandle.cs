@@ -5,10 +5,20 @@ using UnityEngine;
 
 public class ClientHandle : MonoBehaviour
 {
+
+    private const int serverSend = 66;
+    private const int serverHandle = 61; 
     public static void Welcome(Packet _packet)
     {
-        string _msg = _packet.ReadString();
+        int _serverSend = _packet.ReadInt();
+        int _serverHandle = _packet.ReadInt();
         int _id = _packet.ReadInt();
+
+        if ((serverSend != _serverSend) || (serverHandle != _serverHandle)) 
+        {
+            ClientSend.SessionEnd($"wrong version {serverSend} {serverHandle}");
+            return;
+        }
 
         Client.instance.myId = _id;
         ClientSend.WelcomeReceived();

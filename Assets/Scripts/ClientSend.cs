@@ -42,5 +42,15 @@ public class ClientSend : MonoBehaviour
         }
     }
 
+    public static void SessionEnd(string reason)
+    {
+        using (Packet _packet = new Packet((int)ClientPackets.sessionEnd))
+        {
+            _packet.Write(reason);
+
+            SendTCPData(_packet);
+        }
+    }
+
     #endregion
 }
