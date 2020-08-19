@@ -6,7 +6,7 @@ using UnityEngine;
 public class ClientHandle : MonoBehaviour
 {
 
-    private const int serverSend = 66;
+    private const int serverSend = 77;
     private const int serverHandle = 61; 
     public static void Welcome(Packet _packet)
     {
@@ -53,4 +53,13 @@ public class ClientHandle : MonoBehaviour
 
         GameManager.players[_id].transform.rotation = _rotation;
     }
+
+    public static void PlayerQuit(Packet _packet)
+    {
+        int _id = _packet.ReadInt();
+        int _reason = _packet.ReadInt();
+
+        GameManager.instance.DeSpawnPlayer(_id, _reason);
+    }
+
 }

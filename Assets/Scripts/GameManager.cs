@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -37,8 +38,18 @@ public class GameManager : MonoBehaviour
             _player = Instantiate(playerPrefab, _position, _rotation);
         }
 
-        _player.GetComponent<PlayerManager>().id = _id;
-        _player.GetComponent<PlayerManager>().username = _username;
+        var _pm = _player.GetComponent<PlayerManager>();
+        _pm.id = _id;
+        _pm.username = _username;
         players.Add(_id, _player.GetComponent<PlayerManager>());
+    }
+
+    internal void DeSpawnPlayer(int _id, int reason)
+    {
+        if (players.TryGetValue(_id, out var _playerManager))
+        {
+            Destroy(_playerManager.gameObject);
+        }
+        players.Remove(_id);
     }
 }
