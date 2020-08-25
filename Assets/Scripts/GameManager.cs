@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject localPlayerPrefab;
     public GameObject playerPrefab;
+    public Canvas canvas;
 
     private void Awake()
     {
@@ -38,9 +39,12 @@ public class GameManager : MonoBehaviour
             _player = Instantiate(playerPrefab, _position, _rotation);
         }
 
+        var label = canvas.GetComponent<UIManager>().AddPlayerLabel(_username);
         var _pm = _player.GetComponent<PlayerManager>();
+
         _pm.id = _id;
         _pm.username = _username;
+        _pm.label = label;
         players.Add(_id, _player.GetComponent<PlayerManager>());
     }
 
