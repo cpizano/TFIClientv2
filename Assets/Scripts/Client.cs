@@ -47,7 +47,7 @@ public class Client : MonoBehaviour
 
     public void ConnectToServer(string _playerrName, string _serverAddress)
     {
-        playerName = "<-" + _playerrName + "->";
+        playerName = _playerrName;
         InitializeClientData();
         isConnected = true;
         tcp.Connect(_serverAddress, port);

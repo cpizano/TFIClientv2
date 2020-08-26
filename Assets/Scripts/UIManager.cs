@@ -8,10 +8,9 @@ public class UIManager : MonoBehaviour
 {
     public TextMeshProUGUI playerLabelPrefab;
 
-    public TextMeshProUGUI AddPlayerLabel(string label)
+    public TextMeshProUGUI AddPlayerLabel()
     {
         var tmp = Instantiate(playerLabelPrefab, gameObject.transform);
-        tmp.text = label;
         return tmp;
     }
 }

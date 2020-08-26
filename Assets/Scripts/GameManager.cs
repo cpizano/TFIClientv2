@@ -28,24 +28,21 @@ public class GameManager : MonoBehaviour
 
     public void SpawnPlayer(int _id, string _username, Vector3 _position, Quaternion _rotation)
     {
-        GameObject _player;
+        GameObject _player = Instantiate(localPlayerPrefab, _position, _rotation);
+
+        Camera camera = null;
+ 
         if (_id == Client.instance.myId)
         {
-            _player = Instantiate(localPlayerPrefab, _position, _rotation);
-            _player.GetComponent<PlayerManager>().mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
-        }
-        else
-        {
-            _player = Instantiate(playerPrefab, _position, _rotation);
+            // Local player gets the camera.
+            camera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         }
 
-        var label = canvas.GetComponent<UIManager>().AddPlayerLabel(_username);
+        var label = canvas.GetComponent<UIManager>().AddPlayerLabel();
         var _pm = _player.GetComponent<PlayerManager>();
+        _pm.Init(_id, _username, label, camera);
 
-        _pm.id = _id;
-        _pm.username = _username;
-        _pm.label = label;
-        players.Add(_id, _player.GetComponent<PlayerManager>());
+        players.Add(_id, _pm);
     }
 
     internal void DeSpawnPlayer(int _id, int reason)

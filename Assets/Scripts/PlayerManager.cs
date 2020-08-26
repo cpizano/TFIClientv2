@@ -12,6 +12,15 @@ public class PlayerManager : MonoBehaviour
 
     private static Vector3 labelOffset = new Vector3(0, -1.3f, 0);
 
+    public void Init(int _id, string _username, TextMeshProUGUI _label, Camera _camera)
+    {
+        id = _id;
+        username = _username;
+        mainCamera = _camera;
+        label = _label;
+        label.text = _username;
+    }
+
     private void FixedUpdate()
     {
         if (mainCamera != null)
