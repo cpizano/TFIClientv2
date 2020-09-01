@@ -14,7 +14,6 @@ public class PlayerManager : MonoBehaviour
     private Animator animator;
     private int animationStopTimer = 0;
 
-
     public void Init(int _id, string _username, TextMeshProUGUI _label, Camera _camera)
     {
         id = _id;
@@ -44,6 +43,19 @@ public class PlayerManager : MonoBehaviour
         animator.SetFloat("Move X", _delta.x);
         animator.SetFloat("Move Y", _delta.y);
         animationStopTimer = 5;
+    }
+
+    public void SetZoom(int _factor)
+    {
+        switch (_factor)
+        {
+            case 0: mainCamera.transform.localScale = Vector3.one; break;
+            case 1: mainCamera.transform.localScale = Vector3.one * 1.5f; break;
+            case 2: mainCamera.transform.localScale = Vector3.one * 2.0f; break;
+            case 3: mainCamera.transform.localScale = Vector3.one * 2.5f; break;
+            default:
+                break;
+        }
     }
 
     private void FixedUpdate()

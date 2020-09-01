@@ -5,9 +5,25 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    private PlayerManager playerManager;
+    private int scale = 0;
+
+    private void Start()
+    {
+        playerManager = GetComponent<PlayerManager>();
+    }
     private void FixedUpdate()
     {
         SendInputToServer();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Z))
+        {
+            scale = (scale + 1) % 4;
+            playerManager.SetZoom(scale);
+        }
     }
 
     private void SendInputToServer()
