@@ -13,14 +13,16 @@ public class PlayerManager : MonoBehaviour
     private static Vector3 labelOffset = new Vector3(0, -1.3f, 0);
     private Animator animator;
     private int animationStopTimer = 0;
+    private bool isLocal = false;
 
-    public void Init(int _id, string _username, TextMeshProUGUI _label, Camera _camera)
+    public void Init(int _id, string _username, TextMeshProUGUI _label, Camera _camera, bool _local)
     {
         id = _id;
         username = _username;
         mainCamera = _camera;
         label = _label;
         label.text = _username;
+        isLocal = _local;
         animator = GetComponent<Animator>();
     }
 
@@ -30,7 +32,7 @@ public class PlayerManager : MonoBehaviour
         // blend tree so we need to magify the delta (by at least 4).
         var _delta = (_new_pos - transform.position) * 4f; ;
 
-        if (mainCamera != null)
+        if (isLocal)
         {
             var _pos = _new_pos;
             _pos.z = mainCamera.transform.position.z;
@@ -60,7 +62,12 @@ public class PlayerManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        label.transform.position = transform.position + labelOffset;
+        // So the label belongs to the canvas which in turns uses
+        // mainCamera as the render camera. Now the render mode is set
+        // to Screen-space-overlay which operates in screen points..
+        label.transform.position = mainCamera.WorldToScreenPoint(transform.position + labelOffset);
+        
+
         if (animationStopTimer == 0)
         {
             animator.enabled = false;
@@ -71,8 +78,4 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        
-    }
 }
