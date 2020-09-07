@@ -74,7 +74,7 @@ public class PlayerManager : MonoBehaviour
         }
         else
         {
-            animationStopTimer += -1;
+            animationStopTimer -= 1;
         }
     }
 
