@@ -158,6 +158,7 @@ MonoBehaviour:
   playerPrefab: {fileID: 4855604238645384027, guid: 3a6d26b336102e4469821902cec6df11,
     type: 3}
   canvas: {fileID: 2057570043}
+  tilemap: {fileID: 1630198167}
 --- !u!4 &161267985
 Transform:
   m_ObjectHideFlags: 0
