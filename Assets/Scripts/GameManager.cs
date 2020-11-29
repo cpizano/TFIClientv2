@@ -13,9 +13,9 @@ public class GameManager : MonoBehaviour
     public GameObject localPlayerPrefab;
     public GameObject playerPrefab;
     public Canvas canvas;
-    public Tilemap tilemap;
+    public Tilemap tilemap_L0;
 
-    private Tile[] tiles;
+    private Tile[] tiles_L0;
 
     private void Awake()
     {
@@ -32,7 +32,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        tiles = Resources.FindObjectsOfTypeAll<Tile>();
+        tiles_L0 = new Tile[1071];
+        
     }
 
     public void SpawnPlayer(int _id, string _username, Vector3 _position, Quaternion _rotation)
@@ -61,16 +62,24 @@ public class GameManager : MonoBehaviour
 
         players.Add(_id, _pm);
 
-        var cell = tilemap.layoutGrid.WorldToCell(_position);
-        SetTiles(_id, cell.x, cell.y, 1);
+        var cell = tilemap_L0.layoutGrid.WorldToCell(_position);
+        SetTiles(761, cell.x, cell.y, 1);
     }
 
     public void SetTiles(int index, int x, int y, int count)
     {
+        if (tiles_L0[index] == null)
+        {
+            tiles_L0[index] = Resources.Load<Tile>("Tiles/water_env_" + index.ToString());
+        }
+
         for (int ix = 0; ix < count; ++ix)
         {
-            tilemap.SetTile(new Vector3Int(x + ix, y, 0), tiles[index]);
+            var pos = new Vector3Int(x + ix, y, 0);
+            tilemap_L0.SetTile(pos, tiles_L0[index]);
         }
+
+        tilemap_L0.RefreshAllTiles();
     }
 
     internal void DeSpawnPlayer(int _id, int reason)
