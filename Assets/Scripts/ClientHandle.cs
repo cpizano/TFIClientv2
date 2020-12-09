@@ -5,22 +5,33 @@ using UnityEngine;
 
 public class ClientHandle : MonoBehaviour
 {
+    public static MapHandler mapHandler;
 
-    private const int serverSend = 77;
-    private const int serverHandle = 61; 
+    private const int serverSend = 81;
+    private const int serverHandle = 61;
+
     public static void Welcome(Packet _packet)
     {
         int _serverSend = _packet.ReadInt();
         int _serverHandle = _packet.ReadInt();
         int _id = _packet.ReadInt();
+        int mapVersion = _packet.ReadInt();
+        int mapLayerCount = _packet.ReadInt();
+        int mapRowCount = _packet.ReadInt();
+        int mapColumnCount = _packet.ReadInt();
 
-        if ((serverSend != _serverSend) || (serverHandle != _serverHandle)) 
+        if ((serverSend != _serverSend) ||
+            (serverHandle != _serverHandle) ||
+            (MapHandler.mapVersion != mapVersion))
         {
-            ClientSend.SessionEnd($"wrong version {serverSend} {serverHandle}");
+            ClientSend.SessionEnd($"wrong version {serverSend} {serverHandle} {mapVersion}");
             return;
         }
 
         Client.instance.myId = _id;
+
+        mapHandler = new MapHandler(mapLayerCount, mapRowCount, mapColumnCount);
+
         ClientSend.WelcomeReceived();
 
         Client.instance.udp.Connect(Client.instance.tcp.socket.Client);
