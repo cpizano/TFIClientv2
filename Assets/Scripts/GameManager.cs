@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour
 
     private Tile[] tiles_L0;
 
+    private readonly int[] water_tiles = { 192, 197, 198, 203, 204 };
+    private readonly System.Random random = new System.Random();
+
     private void Awake()
     {
         if (instance == null)
@@ -62,24 +65,39 @@ public class GameManager : MonoBehaviour
 
         players.Add(_id, _pm);
 
-        var cell = tilemap_L0.layoutGrid.WorldToCell(_position);
-        SetTiles(761, cell.x, cell.y, 1);
+        //var cell = tilemap_L0.layoutGrid.WorldToCell(_position);
+        //SetTiles(761, cell.x, cell.y, 1);
     }
 
-    public void SetTiles(int index, int x, int y, int count)
+    public void SetTiles(int row, short[] indexes)
     {
+        for (int ix = 0; ix < indexes.Length; ++ix)
+        {
+            var pos = new Vector3Int(ix, row, 0);
+            tilemap_L0.SetTile(pos, LoadTitle(indexes[ix]));
+        }
+
+        tilemap_L0.RefreshAllTiles();
+    }
+
+    public Tile LoadTitle(int index)
+    {
+        if (index < 0)
+        {
+            index = GetRandomWaterTileIndex();
+        }
+
         if (tiles_L0[index] == null)
         {
             tiles_L0[index] = Resources.Load<Tile>("Tiles/water_env_" + index.ToString());
         }
 
-        for (int ix = 0; ix < count; ++ix)
-        {
-            var pos = new Vector3Int(x + ix, y, 0);
-            tilemap_L0.SetTile(pos, tiles_L0[index]);
-        }
+        return tiles_L0[index];
+    }
 
-        tilemap_L0.RefreshAllTiles();
+    internal int GetRandomWaterTileIndex()
+    {
+        return water_tiles[random.Next(0, water_tiles.GetUpperBound(0))];
     }
 
     internal void DeSpawnPlayer(int _id, int reason)

@@ -10,7 +10,8 @@ public enum ServerPackets
     spawnPlayer,
     playerPosition,
     playerRotation,
-    playerQuit
+    playerQuit,
+    mapLayerRow
 }
 
 /// <summary>Sent from client to server.</summary>

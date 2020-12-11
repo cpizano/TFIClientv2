@@ -7,7 +7,7 @@ public class ClientHandle : MonoBehaviour
 {
     public static MapHandler mapHandler;
 
-    private const int serverSend = 81;
+    private const int serverSend = 99;
     private const int serverHandle = 61;
 
     public static void Welcome(Packet _packet)
@@ -38,6 +38,20 @@ public class ClientHandle : MonoBehaviour
 
         Debug.Log($"Server welcomes as player {_id}");
     }
+
+    public static void MapLayerRow(Packet _packet)
+    {
+        _packet.ReadInt();  // layer (always 0)
+        int row = _packet.ReadInt();
+        int row_len = _packet.ReadInt();
+        var cells = new short[row_len];
+        for (int ix = 0; ix < row_len; ix++)
+        {
+            cells[ix] = _packet.ReadShort();
+        }
+        GameManager.instance.SetTiles(row, cells);
+    }
+
     public static void SpawnPlayer(Packet _packet)
     {
         int _id = _packet.ReadInt();
