@@ -89,7 +89,7 @@ public class GameManager : MonoBehaviour
 
         if (tiles_L0[index] == null)
         {
-            tiles_L0[index] = Resources.Load<Tile>("Tiles/water_env_" + index.ToString());
+            tiles_L0[index] = Resources.Load<Tile>("Tiles/water_crop_" + index.ToString());
         }
 
         return tiles_L0[index];
