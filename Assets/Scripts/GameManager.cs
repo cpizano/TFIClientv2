@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
 
     private Tile[] tiles_L0;
 
-    private readonly int[] water_tiles = { 192, 197, 198, 203, 204 };
     private readonly System.Random random = new System.Random();
 
     private void Awake()
@@ -35,7 +34,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        tiles_L0 = new Tile[1071];
+        tiles_L0 = new Tile[2000];
         
     }
 
@@ -73,8 +72,14 @@ public class GameManager : MonoBehaviour
     {
         for (int ix = 0; ix < indexes.Length; ++ix)
         {
+            var cell_id = indexes[ix];
+            if (cell_id < 0)
+            {
+                continue;
+            }
+
             var pos = new Vector3Int(ix, row, 0);
-            tilemap_L0.SetTile(pos, LoadTitle(indexes[ix]));
+            tilemap_L0.SetTile(pos, LoadTitle(cell_id));
         }
 
         tilemap_L0.RefreshAllTiles();
@@ -82,22 +87,12 @@ public class GameManager : MonoBehaviour
 
     public Tile LoadTitle(int index)
     {
-        if (index < 0)
-        {
-            index = GetRandomWaterTileIndex();
-        }
-
         if (tiles_L0[index] == null)
         {
-            tiles_L0[index] = Resources.Load<Tile>("Tiles/water_crop_" + index.ToString());
+            tiles_L0[index] = Resources.Load<Tile>($"Tiles/gemap_{index}");
         }
 
         return tiles_L0[index];
-    }
-
-    internal int GetRandomWaterTileIndex()
-    {
-        return water_tiles[random.Next(0, water_tiles.GetUpperBound(0))];
     }
 
     internal void DeSpawnPlayer(int _id, int reason)
