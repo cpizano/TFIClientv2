@@ -17,8 +17,6 @@ public class GameManager : MonoBehaviour
 
     private Tile[] tiles_L0;
 
-    private readonly System.Random random = new System.Random();
-
     private void Awake()
     {
         if (instance == null)
@@ -32,10 +30,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void Start()
+    public void InitTileMap(int layers, int rows, int columns)
     {
-        tiles_L0 = new Tile[2000];
-        
+        tiles_L0 = new Tile[1300];
     }
 
     public void SpawnPlayer(int _id, string _username, Vector3 _position, Quaternion _rotation)
@@ -65,20 +62,20 @@ public class GameManager : MonoBehaviour
         players.Add(_id, _pm);
 
         //var cell = tilemap_L0.layoutGrid.WorldToCell(_position);
-        //SetTiles(761, cell.x, cell.y, 1);
     }
 
-    public void SetTiles(int row, short[] indexes)
+    public void SetTiles(int layer, int row, short[] indexes)
     {
         for (int ix = 0; ix < indexes.Length; ++ix)
         {
             var cell_id = indexes[ix];
-            if (cell_id < 0)
+            if (cell_id < 0 || cell_id >= tiles_L0.Length)
             {
+                // -1 values are expected. They mark "no tile".
                 continue;
             }
 
-            var pos = new Vector3Int(ix, row, 0);
+            var pos = new Vector3Int(ix, row, layer);
             tilemap_L0.SetTile(pos, LoadTitle(cell_id));
         }
 

@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class ClientHandle : MonoBehaviour
 {
-    public static MapHandler mapHandler;
-
     private const int serverSend = 99;
     private const int serverHandle = 61;
 
@@ -22,15 +20,14 @@ public class ClientHandle : MonoBehaviour
 
         if ((serverSend != _serverSend) ||
             (serverHandle != _serverHandle) ||
-            (MapHandler.mapVersion != mapVersion))
+            (2 != mapVersion))
         {
             ClientSend.SessionEnd($"wrong version {serverSend} {serverHandle} {mapVersion}");
             return;
         }
 
         Client.instance.myId = _id;
-
-        mapHandler = new MapHandler(mapLayerCount, mapRowCount, mapColumnCount);
+        GameManager.instance.InitTileMap(mapLayerCount, mapRowCount, mapColumnCount);
 
         ClientSend.WelcomeReceived();
 
@@ -41,7 +38,7 @@ public class ClientHandle : MonoBehaviour
 
     public static void MapLayerRow(Packet _packet)
     {
-        _packet.ReadInt();  // layer (always 0)
+        int layer = _packet.ReadInt();
         int row = _packet.ReadInt();
         int row_len = _packet.ReadInt();
         var cells = new short[row_len];
@@ -49,7 +46,7 @@ public class ClientHandle : MonoBehaviour
         {
             cells[ix] = _packet.ReadShort();
         }
-        GameManager.instance.SetTiles(row, cells);
+        GameManager.instance.SetTiles(layer, row, cells);
     }
 
     public static void SpawnPlayer(Packet _packet)
