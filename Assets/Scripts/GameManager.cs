@@ -69,11 +69,14 @@ public class GameManager : MonoBehaviour
         for (int ix = 0; ix < indexes.Length; ++ix)
         {
             var cell_id = indexes[ix];
-            if (cell_id < 0 || cell_id >= tiles_L0.Length)
+            if (cell_id == 0 || cell_id > tiles_L0.Length)
             {
-                // -1 values are expected. They mark "no tile".
+                // 0 values are expected. They mark "no tile".
                 continue;
             }
+
+            // Server-side the titles are 1-based.
+            cell_id -= 1;
 
             var pos = new Vector3Int(ix, row, layer);
             tilemap_L0.SetTile(pos, LoadTitle(cell_id));
