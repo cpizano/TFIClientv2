@@ -60,6 +60,7 @@ public class GameManager : MonoBehaviour
         _pm.Init(_id, _username, label, _camera, _local);
 
         players.Add(_id, _pm);
+        _pm.Move(_position);
 
         //var cell = tilemap_L0.layoutGrid.WorldToCell(_position);
     }
