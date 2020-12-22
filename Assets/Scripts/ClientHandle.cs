@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ClientHandle : MonoBehaviour
 {
-    private const int serverSend = 99;
+    private const int serverSend = 100;
     private const int serverHandle = 61;
 
     public static void Welcome(Packet _packet)
@@ -13,14 +13,16 @@ public class ClientHandle : MonoBehaviour
         int _serverSend = _packet.ReadInt();
         int _serverHandle = _packet.ReadInt();
         int _id = _packet.ReadInt();
+        int pixels_per_unit = _packet.ReadInt();
         int mapVersion = _packet.ReadInt();
         int mapLayerCount = _packet.ReadInt();
         int mapRowCount = _packet.ReadInt();
         int mapColumnCount = _packet.ReadInt();
 
+        // TODO: sync the pixels per unit with Unity framework.
         if ((serverSend != _serverSend) ||
             (serverHandle != _serverHandle) ||
-            (2 != mapVersion))
+            (2 != mapVersion) || pixels_per_unit != 32)
         {
             ClientSend.SessionEnd($"wrong version {serverSend} {serverHandle} {mapVersion}");
             return;
