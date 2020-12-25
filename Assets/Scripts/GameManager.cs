@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     public Canvas canvas;
     public Tilemap tilemap_L0;
     public Tilemap tilemap_L1;
+    public Tilemap tilemap_L2;
+    public Tilemap tilemap_L3;
 
     private Tile[] tiles_L0;
 
@@ -80,7 +82,7 @@ public class GameManager : MonoBehaviour
             // Server-side the titles are 1-based.
             cell_id -= 1;
 
-            // Each of the 4 server side layers maps to 2 tilemaps.
+            // Each of the 8 server side layers maps to 4 tilemaps.
             if (layer == 0 || layer == 1)
             {
                 var pos = new Vector3Int(ix, row, layer);
@@ -91,6 +93,17 @@ public class GameManager : MonoBehaviour
                 var pos = new Vector3Int(ix, row, layer - 2);
                 tilemap_L1.SetTile(pos, LoadTitle(cell_id));
             }
+            if (layer == 4 || layer == 5)
+            {
+                var pos = new Vector3Int(ix, row, layer - 4);
+                tilemap_L2.SetTile(pos, LoadTitle(cell_id));
+            }
+            if (layer == 6 || layer == 7)
+            {
+                var pos = new Vector3Int(ix, row, layer - 6);
+                tilemap_L3.SetTile(pos, LoadTitle(cell_id));
+            }
+
         }
 
         tilemap_L0.RefreshAllTiles();
