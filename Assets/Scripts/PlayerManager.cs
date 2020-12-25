@@ -55,7 +55,6 @@ public class PlayerManager : MonoBehaviour
             case 1: mainCamera.transform.localScale = Vector3.one; break;
             case 2: mainCamera.transform.localScale = Vector3.one * 1.5f; break;
             case 3: mainCamera.transform.localScale = Vector3.one * 2.0f; break;
-            case 4: mainCamera.transform.localScale = Vector3.one * 2.5f; break;
             default:
                 break;
         }
