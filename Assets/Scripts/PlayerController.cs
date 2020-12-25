@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         playerManager = GetComponent<PlayerManager>();
+        playerManager.SetZoom(0);
     }
     private void FixedUpdate()
     {
