@@ -12,8 +12,10 @@ public class PlayerManager : MonoBehaviour
 
     private static Vector3 labelOffset = new Vector3(0, -1.3f, 0);
     private Animator animator;
+    //private Renderer renderer;
     private int animationStopTimer = 0;
     private bool isLocal = false;
+    private int z_level = 0;
 
     public void Init(int _id, string _username, TextMeshProUGUI _label, Camera _camera, bool _local)
     {
@@ -26,24 +28,38 @@ public class PlayerManager : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    public void Move(Vector3 _new_pos)
+    public void Move(Vector2 _new_pos, int _z_level)
     {
+
         // There is a weird bias towards the left animation in the
         // blend tree so we need to magify the delta (by at least 4).
-        var _delta = (_new_pos - transform.position) * 4f; ;
+        //var _delta = (_new_pos - transform.position) * 4f; ;
+        var _delta_x = _new_pos.x - transform.position.x;
+        var _delta_y = _new_pos.y - transform.position.y;
 
         if (isLocal)
         {
             var _pos = _new_pos;
-            _pos.z = mainCamera.transform.position.z;
-            mainCamera.transform.position = _pos;
+            var camera_z = mainCamera.transform.position.z;
+            var camera_pos = new Vector3(_new_pos.x, _new_pos.y, camera_z);
+            mainCamera.transform.position = camera_pos;
+        }
+
+        var zdiff = _z_level - z_level; 
+        if (zdiff > 0)
+        {
+            GetComponent<Renderer>().sortingOrder += 1;
+        }
+        else if (zdiff < 0)
+        {
+            GetComponent<Renderer>().sortingOrder -= 1;
         }
 
         transform.position = _new_pos;
 
         animator.enabled = true;
-        animator.SetFloat("Move X", _delta.x);
-        animator.SetFloat("Move Y", _delta.y);
+        animator.SetFloat("Move X", _delta_x * 4f);
+        animator.SetFloat("Move Y", _delta_y * 4f);
         animationStopTimer = 5;
     }
 

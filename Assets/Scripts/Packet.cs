@@ -352,6 +352,13 @@ public class Packet : IDisposable
         }
     }
 
+    /// <summary>Reads a Vector2 from the packet.</summary>
+    /// <param name="_moveReadPos">Whether or not to move the buffer's read position.</param>
+    public Vector2 ReadVector2(bool _moveReadPos = true)
+    {
+        return new Vector2(ReadFloat(_moveReadPos), ReadFloat(_moveReadPos));
+    }
+
     /// <summary>Reads a Vector3 from the packet.</summary>
     /// <param name="_moveReadPos">Whether or not to move the buffer's read position.</param>
     public Vector3 ReadVector3(bool _moveReadPos = true)

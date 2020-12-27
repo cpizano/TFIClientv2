@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
         tiles_L0 = new Tile[1300];
     }
 
-    public void SpawnPlayer(int _id, string _username, Vector3 _position, Quaternion _rotation)
+    public void SpawnPlayer(int _id, string _username, Vector2 _position, int _z_level, Quaternion _rotation)
     {
         GameObject _player;
         bool _local;
@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
         _pm.Init(_id, _username, label, _camera, _local);
 
         players.Add(_id, _pm);
-        _pm.Move(_position);
+        _pm.Move(_position, _z_level);
 
         //var cell = tilemap_L0.layoutGrid.WorldToCell(_position);
     }
