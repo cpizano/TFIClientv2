@@ -45,14 +45,10 @@ public class PlayerManager : MonoBehaviour
             mainCamera.transform.position = camera_pos;
         }
 
-        var zdiff = _z_level - z_level; 
-        if (zdiff > 0)
+        if (z_level != _z_level)
         {
-            GetComponent<Renderer>().sortingOrder += 1;
-        }
-        else if (zdiff < 0)
-        {
-            GetComponent<Renderer>().sortingOrder -= 1;
+            z_level = _z_level;
+            GetComponent<Renderer>().sortingOrder = z_level;
         }
 
         transform.position = _new_pos;
