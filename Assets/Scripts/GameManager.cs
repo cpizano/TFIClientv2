@@ -106,7 +106,10 @@ public class GameManager : MonoBehaviour
 
         }
 
-        tilemap_L0.RefreshAllTiles();
+        // We used to call RefreshAllTiles() here but it seems not necessary
+        // and added significant lag. If ever needed, consider using a |dirty| flag
+        // and calling it just once per layer once player moves or something like
+        // that.
     }
 
     public Tile LoadTitle(int index)
