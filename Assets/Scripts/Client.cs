@@ -224,38 +224,24 @@ public class Client : MonoBehaviour
 
         public void SendData(Packet _packet)
         {
-            try
+            _packet.InsertInt(instance.myId);
+            if (socket != null)
             {
-                _packet.InsertInt(instance.myId);
-                if (socket != null)
-                {
-                    socket.BeginSend(_packet.ToArray(), _packet.Length(), null, null);
-                }
-            }
-            catch (Exception _ex)
-            {
-                Debug.Log($"Error sending data to server via UDP: {_ex}");
+                socket.BeginSend(_packet.ToArray(), _packet.Length(), null, null);
             }
         }
 
         private void ReceiveCallback(IAsyncResult _result)
         {
-            try
-            {
-                byte[] _data = socket.EndReceive(_result, ref endPoint);
-                socket.BeginReceive(ReceiveCallback, null);
+            byte[] _data = socket.EndReceive(_result, ref endPoint);
+            socket.BeginReceive(ReceiveCallback, null);
 
-                if (_data.Length < 4)
-                {
-                    instance.Disconnect();
-                    return;
-                }
-                HandleData(_data);
-            }
-            catch
+            if (_data.Length < 4)
             {
-                Disconnect();
+                instance.Disconnect();
+                return;
             }
+            HandleData(_data);
         }
 
         private void HandleData(byte[] _data)
