@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     public Tilemap tilemap_L2;
     public Tilemap tilemap_L3;
 
-    private Tile[] tiles_L0;
+    private Tile[] tiles;
 
     private void Awake()
     {
@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
 
     public void InitTileMap(int layers, int rows, int columns)
     {
-        tiles_L0 = new Tile[1300];
+        tiles = new Tile[1300];
     }
 
     public void SpawnPlayer(int _id, string _username, Vector2 _position, int _z_level, Quaternion _rotation)
@@ -48,7 +48,6 @@ public class GameManager : MonoBehaviour
             // Local player gets the camera.
             _player = Instantiate(localPlayerPrefab, _position, _rotation);
             _local = true;
-
         }
         else
         {
@@ -73,7 +72,7 @@ public class GameManager : MonoBehaviour
         for (int ix = 0; ix < indexes.Length; ++ix)
         {
             var cell_id = indexes[ix];
-            if (cell_id == 0 || cell_id > tiles_L0.Length)
+            if (cell_id == 0 || cell_id > tiles.Length)
             {
                 // 0 values are expected. They mark "no tile".
                 continue;
@@ -121,12 +120,16 @@ public class GameManager : MonoBehaviour
 
     public Tile LoadTitle(int index)
     {
-        if (tiles_L0[index] == null)
+        if (tiles[index] == null)
         {
-            tiles_L0[index] = Resources.Load<Tile>($"Tiles/gemap_{index}");
+            tiles[index] = Resources.Load<Tile>($"Tiles/gemap_{index}");
+            if (tiles[index] == null)
+            {
+                throw new Exception($"tile not found {index}");
+            } 
         }
 
-        return tiles_L0[index];
+        return tiles[index];
     }
 
     internal void DeSpawnPlayer(int _id, int reason)
