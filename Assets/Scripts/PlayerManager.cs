@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -30,7 +31,6 @@ public class PlayerManager : MonoBehaviour
 
     public void Move(Vector2 _new_pos, int _z_level)
     {
-
         // There is a weird bias towards the left animation in the
         // blend tree so we need to magify the delta (by at least 4).
         //var _delta = (_new_pos - transform.position) * 4f; ;
@@ -68,7 +68,7 @@ public class PlayerManager : MonoBehaviour
             case 2: mainCamera.transform.localScale = Vector3.one * 1.5f; break;
             case 3: mainCamera.transform.localScale = Vector3.one * 2.0f; break;
             default:
-                break;
+                throw new Exception("invalid zoon factor");
         }
     }
 
@@ -79,7 +79,6 @@ public class PlayerManager : MonoBehaviour
         // to Screen-space-overlay which operates in screen points..
         label.transform.position = mainCamera.WorldToScreenPoint(transform.position + labelOffset);
         
-
         if (animationStopTimer == 0)
         {
             animator.enabled = false;
