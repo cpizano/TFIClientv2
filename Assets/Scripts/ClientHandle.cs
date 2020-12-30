@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
@@ -24,8 +25,7 @@ public class ClientHandle : MonoBehaviour
             (serverHandle != _serverHandle) ||
             (2 != mapVersion) || pixels_per_unit != 32)
         {
-            ClientSend.SessionEnd($"wrong version {serverSend} {serverHandle} {mapVersion}");
-            return;
+            throw new Exception($"wrong version ss:{serverSend} sh:{serverHandle} mv:{mapVersion}");
         }
 
         Client.instance.myId = _id;
