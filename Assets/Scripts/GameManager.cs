@@ -81,29 +81,36 @@ public class GameManager : MonoBehaviour
 
             // Server-side the titles are 1-based.
             cell_id -= 1;
+            Vector3Int pos;
 
-            // Each of the 8 server side layers maps to 4 tilemaps.
-            if (layer == 0 || layer == 1)
+            // The 8 server side layers are mapped to 4 tilemaps. This is mostly to compensate
+            // for the art assets available at this time.
+            switch (layer)
             {
-                var pos = new Vector3Int(ix, row, layer);
-                tilemap_L0.SetTile(pos, LoadTitle(cell_id));
-            }
-            if (layer == 2 || layer == 3)
-            {
-                var pos = new Vector3Int(ix, row, layer - 2);
-                tilemap_L1.SetTile(pos, LoadTitle(cell_id));
-            }
-            if (layer == 4 || layer == 5)
-            {
-                var pos = new Vector3Int(ix, row, layer - 4);
-                tilemap_L2.SetTile(pos, LoadTitle(cell_id));
-            }
-            if (layer == 6 || layer == 7)
-            {
-                var pos = new Vector3Int(ix, row, layer - 6);
-                tilemap_L3.SetTile(pos, LoadTitle(cell_id));
-            }
+                case 0:
+                case 1:
+                    pos = new Vector3Int(ix, row, layer);
+                    tilemap_L0.SetTile(pos, LoadTitle(cell_id));
+                    break;
+                case 2:
+                case 3:
+                    pos = new Vector3Int(ix, row, layer - 2);
+                    tilemap_L1.SetTile(pos, LoadTitle(cell_id));
+                    break;
+                case 4:
+                case 5:
+                    pos = new Vector3Int(ix, row, layer - 4);
+                    tilemap_L2.SetTile(pos, LoadTitle(cell_id));
+                    break;
+                case 6:
+                case 7:
+                    pos = new Vector3Int(ix, row, layer - 6);
+                    tilemap_L3.SetTile(pos, LoadTitle(cell_id));
+                    break;
 
+                default:
+                    throw new Exception("unknown layer");
+            }
         }
 
         // We used to call RefreshAllTiles() here but it seems not necessary
