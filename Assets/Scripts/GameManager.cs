@@ -74,7 +74,8 @@ public class GameManager : MonoBehaviour
             var cell_id = indexes[ix];
             if (cell_id == 0 || cell_id > tiles.Length)
             {
-                // 0 values are expected. They mark "no tile".
+                // 0 values are expected. They mark "no tile", which is
+                // common for layers > 0.
                 continue;
             }
 

@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ClientHandle : MonoBehaviour
 {
-    private const int serverSend = 102;
+    private const int serverSend = 103;
     private const int serverHandle = 61;
 
     public static void Welcome(Packet _packet)
@@ -43,11 +43,35 @@ public class ClientHandle : MonoBehaviour
         int layer = _packet.ReadInt();
         int row = _packet.ReadInt();
         int row_len = _packet.ReadInt();
-        var cells = new short[row_len];
-        for (int ix = 0; ix < row_len; ix++)
+
+        if (row_len < 10 || row_len > 1024 ||
+            row < 0 || row > 1024 ||
+            layer < 0 || layer > 20)
         {
-            cells[ix] = _packet.ReadShort();
+            throw new Exception("invalid hdr map row");
         }
+
+        // The row is received RLE encoded, so we decode here.
+        var cells = new short[row_len];
+        int ix = 0;
+        do
+        {
+            short cell = _packet.ReadShort();
+            short rle = _packet.ReadShort();
+            var end = ix + rle;
+
+            if (end > row_len)
+            {
+                throw new Exception("invalid rle map row");
+            }
+
+            for (; ix < end; ix++)
+            {
+                cells[ix] = cell;
+            }
+
+        } while (ix < row_len);
+
         GameManager.instance.SetTiles(layer, row, cells);
     }
 
