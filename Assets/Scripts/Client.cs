@@ -18,6 +18,7 @@ public class Client : MonoBehaviour
     private bool isConnected = false;
     private delegate void PacketHandler(Packet _packet);
     private static Dictionary<int, PacketHandler> packetHandlers;
+    bool got_exception = false; 
 
     private void Awake()
     {
@@ -30,6 +31,21 @@ public class Client : MonoBehaviour
         {
             Debug.Log("Client Instance already exists! destroying");
             Destroy(this);
+        }
+
+        Application.logMessageReceivedThreaded += LogMessageReceived;
+    }
+
+    // This callback catches exceptions from any thread.
+    private void LogMessageReceived(string condition, string stackTrace, LogType type)
+    {
+        if ((type == LogType.Exception) && (got_exception == false))
+        {
+            got_exception = true;
+            if (isConnected)
+            {
+                ClientSend.SessionEnd(condition);
+            }
         }
     }
 
