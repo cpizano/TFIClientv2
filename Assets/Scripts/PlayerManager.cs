@@ -9,22 +9,20 @@ public class PlayerManager : MonoBehaviour
 {
     private int id;
     private string username;
-    private UIManager hud;
     private PlayerLabel label;
     private Animator animator;
 
     private int animationStopTimer = 0;
-    private int z_level = 0;
-    private int health = 0;
+    
+    protected int z_level;
+    protected int health;
 
-    public void InitPlayer(int _id, string _username, UIManager _hud, int _health)
+    public void InitPlayer(int _id, string _username, PlayerLabel _label)
     {
         id = _id;
         username = _username;
-        hud = _hud;
-        health = _health;
         animator = GetComponent<Animator>();
-        label = _hud.MakePlayerLabel(_username);
+        label = _label;
     }
 
     public virtual void Move(Vector2 _new_pos, int _z_level)
@@ -68,4 +66,8 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public virtual void HealthChange(int _health)
+    {
+        health = _health;
+    }
 }

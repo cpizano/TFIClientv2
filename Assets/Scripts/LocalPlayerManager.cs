@@ -7,11 +7,14 @@ public class LocalPlayerManager : PlayerManager
 {
 
     private Camera main_camera_;
+    private UIManager hud;
 
     public void Init(int _id, string _username, Camera _camera, UIManager _hud, int _health)
     {
-        InitPlayer(_id, _username, _hud, _health);
         main_camera_ = _camera;
+        hud = _hud;
+        InitPlayer(_id, _username, _hud.MakePlayerLabel(_username));
+        HealthChange(_health);
     }
 
     public override void Move(Vector2 _new_pos, int _z_level)
@@ -34,5 +37,11 @@ public class LocalPlayerManager : PlayerManager
             default:
                 throw new Exception("invalid zoon factor");
         }
+    }
+
+    public override void HealthChange(int _health)
+    {
+        hud.SetHealth(_health);
+        base.HealthChange(_health);
     }
 }

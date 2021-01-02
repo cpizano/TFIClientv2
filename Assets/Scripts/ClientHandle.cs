@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class ClientHandle : MonoBehaviour
 {
-    private const int serverSend = 115;
-    private const int serverHandle = 61;
+    private const int serverSend = 104;
+    private const int serverHandle = 59;
 
     public static void Welcome(Packet _packet)
     {
@@ -81,11 +81,10 @@ public class ClientHandle : MonoBehaviour
         string _username = _packet.ReadString();
         var _position = _packet.ReadVector2();
         var _z_level = _packet.ReadInt();
-        var _rotation = _packet.ReadQuaternion();
         var health = _packet.ReadInt();
 
-        GameManager.instance.SpawnPlayer(_id, _username, _position, _z_level, _rotation, health);
-        Debug.Log($"Spawn player: {_id} pos {_position} rot {_rotation}");
+        GameManager.instance.SpawnPlayer(_id, _username, _position, _z_level, health);
+        Debug.Log($"Spawn player: {_id} pos {_position}");
     }
 
     public static void PlayerPosition(Packet _packet)
@@ -97,14 +96,6 @@ public class ClientHandle : MonoBehaviour
         GameManager.players[_id].Move(_position, z_level);
     }
 
-    public static void PlayerRotation(Packet _packet)
-    {
-        int _id = _packet.ReadInt();
-        Quaternion _rotation = _packet.ReadQuaternion();
-
-        GameManager.players[_id].transform.rotation = _rotation;
-    }
-
     public static void PlayerQuit(Packet _packet)
     {
         int _id = _packet.ReadInt();
@@ -113,4 +104,11 @@ public class ClientHandle : MonoBehaviour
         GameManager.instance.DeSpawnPlayer(_id, _reason);
     }
 
+    internal static void PlayerHealth(Packet _packet)
+    {
+        var _id = _packet.ReadInt();
+        var health = _packet.ReadInt();
+
+        GameManager.players[_id].HealthChange(health);
+    }
 }

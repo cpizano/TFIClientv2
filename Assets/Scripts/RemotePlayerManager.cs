@@ -6,7 +6,8 @@ public class RemotePlayerManager : PlayerManager
 {
     public void Init(int _id, string _username, UIManager _hud, int _health)
     {
-        InitPlayer(_id, _username, _hud, _health);
+        InitPlayer(_id, _username, _hud.MakePlayerLabel($"[{_username}]"));
+        HealthChange(_health);
     }
 
 }

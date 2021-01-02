@@ -46,21 +46,21 @@ public class GameManager : MonoBehaviour
     }
 
     public void SpawnPlayer(int _id, string _username,
-        Vector2 _position, int _z_level, Quaternion _rotation, int _health)
+        Vector2 _position, int _z_level, int _health)
     {
         PlayerManager player_manager;
 
         if (_id == Client.instance.myId)
         {
             // Local player gets the camera.
-            var _player = Instantiate(localPlayerPrefab, _position, _rotation);
+            var _player = Instantiate(localPlayerPrefab);
             var local_pm = _player.GetComponent<LocalPlayerManager>();
             local_pm.Init(_id, _username, main_camera, canvas.GetComponent<UIManager>(), _health);
             player_manager = local_pm;
         }
         else
         {
-            var _player = Instantiate(playerPrefab, _position, _rotation);
+            var _player = Instantiate(playerPrefab);
             var remote_pm = _player.GetComponent<RemotePlayerManager>();
             remote_pm.Init(_id, _username, canvas.GetComponent<UIManager>(), _health);
             player_manager = remote_pm;

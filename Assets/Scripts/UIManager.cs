@@ -44,6 +44,6 @@ public class UIManager : MonoBehaviour
 
     public void SetHealth(int value)
     {
-        health.value = value / 100.0f;
+        health.value = value * 1.0f;
     }
 }
