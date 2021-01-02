@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     public Tilemap tilemap_L2;
     public Tilemap tilemap_L3;
 
+    private Camera main_camera;
     private Tile[] tiles;
 
     private void Awake()
@@ -33,36 +34,40 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        main_camera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+        canvas.GetComponent<UIManager>().WorldCamera = main_camera;
+    }
+
     public void InitTileMap(int layers, int rows, int columns)
     {
         tiles = new Tile[1300];
     }
 
-    public void SpawnPlayer(int _id, string _username, Vector2 _position, int _z_level, Quaternion _rotation)
+    public void SpawnPlayer(int _id, string _username,
+        Vector2 _position, int _z_level, Quaternion _rotation, int _health)
     {
-        GameObject _player;
-        bool _local;
+        PlayerManager player_manager;
 
         if (_id == Client.instance.myId)
         {
             // Local player gets the camera.
-            _player = Instantiate(localPlayerPrefab, _position, _rotation);
-            _local = true;
+            var _player = Instantiate(localPlayerPrefab, _position, _rotation);
+            var local_pm = _player.GetComponent<LocalPlayerManager>();
+            local_pm.Init(_id, _username, main_camera, canvas.GetComponent<UIManager>(), _health);
+            player_manager = local_pm;
         }
         else
         {
-            _player = Instantiate(playerPrefab, _position, _rotation);
-            _local = false;
+            var _player = Instantiate(playerPrefab, _position, _rotation);
+            var remote_pm = _player.GetComponent<RemotePlayerManager>();
+            remote_pm.Init(_id, _username, canvas.GetComponent<UIManager>(), _health);
+            player_manager = remote_pm;
         }
 
-        Camera _camera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
-
-        var label = canvas.GetComponent<UIManager>().AddPlayerLabel();
-        var _pm = _player.GetComponent<PlayerManager>();
-        _pm.Init(_id, _username, label, _camera, _local);
-
-        players.Add(_id, _pm);
-        _pm.Move(_position, _z_level);
+        players.Add(_id, player_manager);
+        player_manager.Move(_position, _z_level);
 
         //var cell = tilemap_L0.layoutGrid.WorldToCell(_position);
     }

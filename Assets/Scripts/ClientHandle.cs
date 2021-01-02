@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ClientHandle : MonoBehaviour
 {
-    private const int serverSend = 103;
+    private const int serverSend = 115;
     private const int serverHandle = 61;
 
     public static void Welcome(Packet _packet)
@@ -81,9 +81,10 @@ public class ClientHandle : MonoBehaviour
         string _username = _packet.ReadString();
         var _position = _packet.ReadVector2();
         var _z_level = _packet.ReadInt();
-        Quaternion _rotation = _packet.ReadQuaternion();
+        var _rotation = _packet.ReadQuaternion();
+        var health = _packet.ReadInt();
 
-        GameManager.instance.SpawnPlayer(_id, _username, _position, _z_level, _rotation);
+        GameManager.instance.SpawnPlayer(_id, _username, _position, _z_level, _rotation, health);
         Debug.Log($"Spawn player: {_id} pos {_position} rot {_rotation}");
     }
 

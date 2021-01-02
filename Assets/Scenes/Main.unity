@@ -2355,3 +2355,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerLabelPrefab: {fileID: 647157928169778909, guid: a499bd8eeae7aaf43a9f7cd207af4953,
     type: 3}
+  health: {fileID: 449553482}
