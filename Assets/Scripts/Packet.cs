@@ -353,6 +353,13 @@ public class Packet : IDisposable
         }
     }
 
+    public Vector2 ReadPositionVector2(float scale, bool _moveReadPos = true)
+    {
+        var x = ReadInt(_moveReadPos) / scale;
+        var y = ReadInt(_moveReadPos) / scale;
+        return new Vector2(x, y);
+    }
+
     /// <summary>Reads a Vector2 from the packet.</summary>
     /// <param name="_moveReadPos">Whether or not to move the buffer's read position.</param>
     public Vector2 ReadVector2(bool _moveReadPos = true)

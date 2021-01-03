@@ -6,8 +6,9 @@ using UnityEngine;
 
 public class ClientHandle : MonoBehaviour
 {
-    private const int serverSend = 104;
+    private const int serverSend = 105;
     private const int serverHandle = 59;
+    private const int scale = 32;
 
     public static void Welcome(Packet _packet)
     {
@@ -23,7 +24,7 @@ public class ClientHandle : MonoBehaviour
         // TODO: sync the pixels per unit with Unity framework.
         if ((serverSend != _serverSend) ||
             (serverHandle != _serverHandle) ||
-            (2 != mapVersion) || pixels_per_unit != 32)
+            (2 != mapVersion) || pixels_per_unit != scale)
         {
             throw new Exception($"wrong version ss:{serverSend} sh:{serverHandle} mv:{mapVersion}");
         }
@@ -79,7 +80,7 @@ public class ClientHandle : MonoBehaviour
     {
         int _id = _packet.ReadInt();
         string _username = _packet.ReadString();
-        var _position = _packet.ReadVector2();
+        var _position = _packet.ReadPositionVector2(scale);
         var _z_level = _packet.ReadInt();
         var health = _packet.ReadInt();
 
@@ -90,7 +91,7 @@ public class ClientHandle : MonoBehaviour
     public static void PlayerPosition(Packet _packet)
     {
         int _id = _packet.ReadInt();
-        var _position = _packet.ReadVector2();
+        var _position = _packet.ReadPositionVector2(scale);
         int z_level = _packet.ReadInt();
 
         GameManager.players[_id].Move(_position, z_level);
